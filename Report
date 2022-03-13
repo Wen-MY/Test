@@ -1,0 +1,124 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.HashMap;
+public class ReportTest {
+	
+	public static void main(String []args)
+	{
+		HashMap<String,Double> sales = new HashMap<String,Double>();
+		try {
+		      File myObj = new File("E:\\Java Project\\src\\SalesRecord.txt");
+		      Scanner myReader = new Scanner(myObj);
+		      while (myReader.hasNextLine()) {
+		    	  
+		        String[] data = myReader.nextLine().split(";");
+		        sales.put(data[1],Double.parseDouble(data[2]));
+		        //double amount = Double.parseDouble(last);
+		        //total += amount;
+		      	}
+		      	myReader.close();
+		    	} catch (FileNotFoundException e) {
+		      System.out.println("An error occurred.");
+		      e.printStackTrace();
+		    }
+		double total=0 , total19 =0 , total20 = 0;
+		double total21 = 0; 
+		Scanner input = new Scanner(System.in);
+		
+		boolean exit=false;
+		do{
+		System.out.println("\n\n1.Sales By Year\n2.Sales By Month in Specific Year\n3.Sales By Quarter of Specific Year\n4.exit\nOption:");
+		int option = input.nextInt();
+		switch(option)
+		{
+		case 1:
+			for(String i :sales.keySet())
+			{
+				String[] stringArray= i.split("-",-3);
+				//System.out.print(stringArray[2]+"\n");
+				if(Integer.parseInt(stringArray[2]) == 2019)
+				{
+					total19 +=sales.get(i);
+				}
+				else if (Integer.parseInt(stringArray[2]) == 2020)
+				{
+					total20 +=sales.get(i);
+				}
+				else 
+				{
+					total21+=sales.get(i);
+				}
+			}
+			System.out.print("Sales of 2019 :"+total19 +"\nSales of 2020 :"+total20+"\nSales of 2021 :"+total21);
+			break;
+		case 2:
+			
+			System.out.print("Year :");
+			int year = input.nextInt();
+			for(int k=1;k<13;k++)
+			{
+				int m_total = 0;
+				for(String i :sales.keySet())
+				{
+					String[] stringArray= i.split("-",-3);
+					if(Integer.parseInt(stringArray[2]) == year)
+					{
+						if(Integer.parseInt(stringArray[1]) == k)
+						{
+							m_total+=sales.get(i);
+						}
+					}
+				}
+				System.out.print("Month " + k +":" +m_total+"\n");
+			}
+			break;
+		case 3:
+			for(int q_year =2019;q_year<=2021;q_year++)
+			{
+				System.out.print(q_year+"\n");
+				for(int k=0;k<4;k++)
+				{
+					double []quarter = {0,0,0,0};
+					for(String i :sales.keySet())
+					{
+						String[] stringArray= i.split("-",-3);
+						if(Integer.parseInt(stringArray[2]) == q_year)
+						{
+							if(Integer.parseInt(stringArray[1]) < 4)
+							{
+								quarter[0]+=sales.get(i);
+							}
+							else if(Integer.parseInt(stringArray[1]) >= 4 && Integer.parseInt(stringArray[1])<7)
+							{
+								quarter[1]+=sales.get(i);
+							}
+							else if(Integer.parseInt(stringArray[1]) >=7 && Integer.parseInt(stringArray[1])<10)
+							{
+								quarter[2]+=sales.get(i);
+							}
+							else
+							{
+								quarter[3]+=sales.get(i);
+							}
+							
+						}
+					}
+					System.out.print("Q" + (k+1) +":" +quarter[k]+"\n");
+				}	
+			}
+			break;
+		case 4:
+			exit=true;
+			break;
+		default:
+			System.out.print("Invalid Option\n");
+		}
+		}while(!exit);
+			
+		input.close();
+		
+		
+		
+	}
+	
